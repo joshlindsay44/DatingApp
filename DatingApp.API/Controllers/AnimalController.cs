@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using DatingApp.API.Data;
+using DatingApp.API.Dtos;
 using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,17 +17,32 @@ namespace DatingApp.API.Controllers
         }
 
         [HttpPost("makeanimal")]
-        public Task<IActionResult> MakeAnimal(string Species, string Color)
+        public async Task<IActionResult> MakeAnimal(AnimalCreateDto animalCreateDto)
         {
             Animal newAnimal = new Animal();
 
-            newAnimal.Species = Species;
-            newAnimal.Color = Color;
+            newAnimal.Species = animalCreateDto.Species;
+            newAnimal.Color = animalCreateDto.color;
 
-            var createdAnimal= _repo.MakeAnimal(newAnimal);
+            var createdAnimal= await _repo.MakeAnimal(newAnimal);
 
             return StatusCode(201);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAnimals()
+        {
+           var yourAnimals = await _repo.GetAnimals();
+
+           return Ok(yourAnimals);
+        }
         
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetAnimal(int Id)
+        {
+           Animal yourAnimal = await _repo.GetAnimal(Id);
+
+           return Ok(yourAnimal);
+        }
     }
 }

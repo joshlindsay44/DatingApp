@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DatingApp.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,26 @@ namespace DatingApp.API.Data
         {
             _context = context;
         }
-        public Task<Animal> MakeAnimal(Animal newAnimal)
+        public async Task<Animal> MakeAnimal(Animal newAnimal)
         {
-            _context.Animals.Add(newAnimal);
-            _context.SaveChanges();
+            await _context.Animals.AddAsync(newAnimal);
+            await _context.SaveChangesAsync();
 
             return newAnimal;
 
+        }
+
+        public async Task<Animal> GetAnimal(int Id)
+        {
+            Animal yourAnimal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == Id);
+            return yourAnimal;
+        }
+
+        public async Task<List<Animal>> GetAnimals()
+        {
+            List<Animal> yourAnimals = new List<Animal>();
+             yourAnimals = await _context.Animals.ToListAsync();
+            return yourAnimals;
         }
     }
 }
