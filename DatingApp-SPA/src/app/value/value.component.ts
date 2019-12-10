@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ValueComponent implements OnInit {
   values: any;
+  /*any in typescript means any type of variable */
 
   constructor(private http: HttpClient) { }
 
@@ -15,7 +16,8 @@ export class ValueComponent implements OnInit {
     this.getValues();
   }
 
-  getValues(){
+  getValues() {
+    /*HttpClient returns results as an "observable"-a stream of data from the api. You must subscribe to get the data. */
     this.http.get('http://localhost:5000/api/values').subscribe(response => {
       this.values = response;
     }, error => {
